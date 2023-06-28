@@ -7,6 +7,8 @@ import {
   TextInput,
   StyleSheet,
   Dimensions,
+  StatusBar,
+  Platform,
 } from "react-native";
 
 interface Club {
@@ -46,6 +48,7 @@ export default function App() {
   const [searchName, setSearchName] = useState("");
   const [searchPosition, setSearchPosition] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const statusBarHeight = Platform.OS === "ios" ? 65 : StatusBar.currentHeight;
 
   useEffect(() => {
     fetchClubs();
@@ -182,6 +185,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+
+      <View style={[styles.statusBar, { height: statusBarHeight }]} />
+
+      <Text style={styles.title}>Mon Petit Gazon</Text>
+      <Text style={styles.title}>Liste des joueurs</Text>
+
       <TextInput
         placeholder="Rechercher par nom"
         value={searchName}
@@ -230,6 +240,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+    marginHorizontal: 10,
+  },
+  statusBar: {
+    backgroundColor: "transparent",
   },
   input: {
     borderWidth: 1,
@@ -237,12 +253,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     width: "80%",
+    borderRadius: 10,
   },
   cardContainer: {
     justifyContent: "space-between",
   },
   flatListContent: {
-    paddingHorizontal: 10,
     paddingTop: 10,
   },
   card: {
@@ -251,6 +267,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     minWidth: 200,
+    marginHorizontal: 1,
   },
   pagination: {
     flexDirection: "row",
