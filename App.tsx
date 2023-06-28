@@ -45,6 +45,7 @@ export default function App() {
   );
   const [searchName, setSearchName] = useState("");
   const [searchPosition, setSearchPosition] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchClubs();
@@ -116,7 +117,7 @@ export default function App() {
     return filteredPlayers;
   };
 
-  const renderItem = ({ item }: { item: Player }) => (
+  const renderCard = ({ item }: { item: Player }) => (
     <PlayerCard player={item} />
   );
 
@@ -163,6 +164,22 @@ export default function App() {
     }
   };
 
+  const numColumns = 4;
+  const cardsPerPage = 20;
+  const totalPages = Math.ceil(filterPlayers().length / cardsPerPage);
+
+  const cardWidth = Dimensions.get("window").width / numColumns;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const getPaginatedData = () => {
+    const startIndex = (currentPage - 1) * cardsPerPage;
+    const endIndex = startIndex + cardsPerPage;
+    return filterPlayers().slice(startIndex, endIndex);
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -179,9 +196,27 @@ export default function App() {
         style={styles.input}
       />
 
-      <View style={styles.playerGrid}>
-        {filterPlayers().map((player) => (
-          <PlayerCard key={player.id} player={player} />
+      <FlatList
+        data={getPaginatedData()}
+        renderItem={renderCard}
+        keyExtractor={(item) => item.id}
+        numColumns={numColumns}
+        columnWrapperStyle={styles.cardContainer}
+        contentContainerStyle={styles.flatListContent}
+      />
+
+      <View style={styles.pagination}>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handlePageChange(index + 1)}
+            style={[
+              styles.pageButton,
+              currentPage === index + 1 && styles.activePageButton,
+            ]}
+          >
+            <Text style={styles.pageButtonText}>{index + 1}</Text>
+          </TouchableOpacity>
         ))}
       </View>
 
@@ -203,17 +238,38 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     width: "80%",
   },
-  playerGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  cardContainer: {
     justifyContent: "space-between",
+  },
+  flatListContent: {
     paddingHorizontal: 10,
     paddingTop: 10,
   },
   card: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#45C945",
     borderRadius: 8,
     padding: 10,
     margin: 10,
+    minWidth: 200,
+  },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  pageButton: {
+    padding: 5,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+  },
+  activePageButton: {
+    backgroundColor: "#ccc",
+  },
+  pageButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
