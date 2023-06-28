@@ -1,71 +1,59 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 interface Club {
   id: string;
   name: { [key: string]: string };
 }
 
-interface ListClubComponentState {
-  clubs: Club[];
-  selectedClub: string | null;
-}
+const ListClubComponent: React.FC = () => {
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [selectedClub, setSelectedClub] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
-export default class ListClubComponent extends React.Component<
-  {},
-  ListClubComponentState
-> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      clubs: [],
-      selectedClub: null,
-    };
-  }
-
-  getClubs = async () => {
+  const getClubs = async () => {
     try {
       const response = await axios.get<{
         championshipClubs: Record<string, Club>;
       }>("https://api.mpg.football/api/data/championship-clubs");
-      const clubs = Object.values(response.data.championshipClubs);
-      console.log(clubs);
-      this.setState({ clubs });
+      const clubsData = Object.values(response.data.championshipClubs);
+      setClubs(clubsData);
     } catch (error) {
       console.error(error);
       // Gérez les erreurs ici
     }
   };
 
-  componentDidMount() {
-    this.getClubs();
-  }
+  useEffect(() => {
+    getClubs();
+  }, []);
 
-  handleClubChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedClub = event.target.value;
-    this.setState({ selectedClub });
+  const handleClubChange = (item: { label: string; value: string }) => {
+    setSelectedClub(item.value);
   };
 
-  render() {
-    const { clubs, selectedClub } = this.state;
+  return (
+    <View>
+      <Text>Sélectionnez un club :</Text>
+      <DropDownPicker
+        open={open}
+        value={selectedClub}
+        items={clubs.map((club) => ({
+          label: club.name["fr-FR"],
+          value: club.id,
+        }))}
+        setOpen={setOpen}
+        setValue={setSelectedClub}
+        setItems={setClubs}
+        placeholder="-- Sélectionner --"
+        searchable={true}
+        searchPlaceholder="Rechercher un club"
+      />
+      {selectedClub && <Text>Club sélectionné : {selectedClub}</Text>}
+    </View>
+  );
+};
 
-    return (
-      <div>
-        <label htmlFor="clubSelect">Sélectionnez un club :</label>
-        <select
-          id="clubSelect"
-          value={selectedClub || ""}
-          onChange={this.handleClubChange}
-        >
-          <option value="">-- Sélectionner --</option>
-          {clubs.map((club) => (
-            <option key={club.id} value={club.id}>
-              {club.name["fr-FR"]}
-            </option>
-          ))}
-        </select>
-        {selectedClub && <p>Club sélectionné : {selectedClub}</p>}
-      </div>
-    );
-  }
-}
+export default ListClubComponent;
