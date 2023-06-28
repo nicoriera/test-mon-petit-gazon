@@ -10,7 +10,10 @@ interface Club {
 
 const ListClubComponent: React.FC = () => {
   const [clubs, setClubs] = useState<Club[]>([]);
-  const [selectedClub, setSelectedClub] = useState<string | null>(null);
+  const [selectedClubValue, setSelectedClubValue] = useState<string | null>(
+    null
+  );
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [open, setOpen] = useState(false);
 
   const getClubs = async () => {
@@ -22,6 +25,7 @@ const ListClubComponent: React.FC = () => {
       setClubs(clubsData);
     } catch (error) {
       console.error(error);
+
       // Gérez les erreurs ici
     }
   };
@@ -30,28 +34,33 @@ const ListClubComponent: React.FC = () => {
     getClubs();
   }, []);
 
-  const handleClubChange = (item: { label: string; value: string }) => {
-    setSelectedClub(item.value);
-  };
+  useEffect(() => {
+    if (selectedClubValue) {
+      const selectedClub = clubs.find((club) => club.id === selectedClubValue);
+      setSelectedClub(selectedClub ?? null);
+    }
+  }, [selectedClubValue]);
 
   return (
     <View>
       <Text>Sélectionnez un club :</Text>
       <DropDownPicker
         open={open}
-        value={selectedClub}
+        value={selectedClubValue}
         items={clubs.map((club) => ({
           label: club.name["fr-FR"],
           value: club.id,
         }))}
         setOpen={setOpen}
-        setValue={setSelectedClub}
+        setValue={setSelectedClubValue}
         setItems={setClubs}
         placeholder="-- Sélectionner --"
         searchable={true}
         searchPlaceholder="Rechercher un club"
       />
-      {selectedClub && <Text>Club sélectionné : {selectedClub}</Text>}
+      {selectedClub && (
+        <Text>Club sélectionné : {selectedClub.name["fr-FR"]}</Text>
+      )}
     </View>
   );
 };
