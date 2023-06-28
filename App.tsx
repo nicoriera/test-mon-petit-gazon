@@ -101,11 +101,17 @@ export default function App() {
 
     // Filtrer par nom
     if (searchName.trim() !== "") {
-      filteredPlayers = filteredPlayers.filter(
-        (player) =>
-          player.firstName.toLowerCase().includes(searchName.toLowerCase()) ||
-          player.lastName.toLowerCase().includes(searchName.toLowerCase())
-      );
+      filteredPlayers = filteredPlayers.filter((player) => {
+        const firstName = player.firstName
+          ? player.firstName.toLowerCase()
+          : "";
+        const lastName = player.lastName ? player.lastName.toLowerCase() : "";
+
+        return (
+          firstName.includes(searchName.toLowerCase()) ||
+          lastName.includes(searchName.toLowerCase())
+        );
+      });
     }
 
     // Filtrer par position
