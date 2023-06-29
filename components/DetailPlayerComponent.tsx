@@ -1,14 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-interface PlayerDetail {
-  id: string;
-  name: string;
-  stats: any; // Replace "any" with the appropriate data structure for player statistics
-}
-interface DetailPlayerComponentProps {
-  player: PlayerDetail;
-}
+import { DetailPlayerComponentProps } from "../types";
 
 const DetailPlayerComponent: React.FC<DetailPlayerComponentProps> = ({
   player,
