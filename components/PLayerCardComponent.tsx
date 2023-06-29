@@ -1,33 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-interface Club {
-  id: string;
-  name: string;
-}
-
-interface Player {
-  id: string;
-  firstName: string;
-  lastName: string;
-  position: number;
-  ultraPosition: number;
-  quotation: number;
-  clubId: string;
-  stats: {
-    averageRating: number;
-    totalGoals: number;
-    totalMatches: number;
-    totalStartedMatches: number;
-    totalPlayedMatches: number;
-  };
-}
-
-interface PlayerCardProps {
-  player: Player;
-  clubs: Club[];
-  players: Player[];
-}
+import { Club } from "../types";
+import { Player } from "../types";
+import { PlayerCardProps } from "../types";
 
 const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -44,6 +20,7 @@ const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
         "https://api.mpg.football/api/data/championship-clubs"
       );
       const data = await response.json();
+
       setClubs(data);
     } catch (error) {
       console.error("Failed to fetch clubs:", error);
@@ -92,8 +69,14 @@ const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
         <Text>
           {player.firstName} {player.lastName}
         </Text>
-        <Text>Position: {getPlayerPosition(player.ultraPosition)}</Text>
+        <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
+
         <Text>Quotation: {player.quotation}</Text>
+        {/* <Text>
+          Club:{" "}
+          {String(clubs.find((club) => club.id === player.clubId)?.name) ||
+            "Nom du club non trouvé"}
+        </Text> */}
       </View>
     </TouchableOpacity>
   );
@@ -101,10 +84,11 @@ const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#85f790",
     borderRadius: 10,
     padding: 10,
-    marginBottom: 10,
+    margin: 10,
+    minWidth: 20,
   },
 });
 
