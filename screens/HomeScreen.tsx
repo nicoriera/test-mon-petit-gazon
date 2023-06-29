@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,11 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import PlayerCardComponent from "../components/PLayerCardComponent";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types";
+import PlayerCardComponent from "../components/PlayerCardComponent";
+import { Ionicons } from "@expo/vector-icons";
 
 type Club = {
   id: string;
@@ -32,16 +35,23 @@ type Player = {
   };
 };
 
-const HomeScreen = () => {
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
+type HomeScreenProps = {
+  navigation: HomeScreenNavigationProp;
+};
+
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [searchName, setSearchName] = useState("");
   const [searchPosition, setSearchPosition] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [visiblePages, setVisiblePages] = useState<number[]>([]);
+  const totalPagesToShow = 5; // Modifier le nombre de pages à afficher selon vos besoins
+
   const numColumns = 4;
   const cardsPerPage = 20;
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     fetchClubs();
@@ -128,13 +138,7 @@ const HomeScreen = () => {
   // Fonction pour afficher chaque carte de joueur
   const renderPlayerCard = ({ item }: { item: Player }) => (
     <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("PlayerDetail", {
-          player: item,
-          clubs: clubs,
-          players: players,
-        } as { player: Player; clubs: Club[]; players: Player[] })
-      }
+      onPress={() => navigation.navigate("PlayerDetail", { playerId: item.id })}
     >
       <PlayerCardComponent player={item} clubs={clubs} players={players} />
     </TouchableOpacity>
@@ -142,13 +146,34 @@ const HomeScreen = () => {
 
   // Fonction pour gérer le changement de page
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= Math.ceil(filterPlayers().length / cardsPerPage)) {
+      setCurrentPage(page);
+
+      const totalPages = Math.ceil(filterPlayers().length / cardsPerPage);
+
+      let startPage = Math.max(1, page - Math.floor(totalPagesToShow / 2));
+      let endPage = Math.min(startPage + totalPagesToShow - 1, totalPages);
+
+      // Ajuster les indices si le nombre total de pages est inférieur à totalPagesToShow
+      if (endPage - startPage + 1 < totalPagesToShow) {
+        startPage = Math.max(1, endPage - totalPagesToShow + 1);
+      }
+
+      setVisiblePages(
+        Array.from(
+          { length: endPage - startPage + 1 },
+          (_, index) => startPage + index
+        )
+      );
+    }
   };
 
   // Fonction pour obtenir les données paginées
   const getPaginatedData = () => {
+    const filteredPlayers = filterPlayers();
     const startIndex = (currentPage - 1) * cardsPerPage;
     const endIndex = startIndex + cardsPerPage;
+    const paginatedData = filteredPlayers.slice(startIndex, endIndex);
     return filterPlayers().slice(startIndex, endIndex);
   };
 
@@ -177,21 +202,36 @@ const HomeScreen = () => {
       />
 
       <View style={styles.pagination}>
-        {Array.from(
-          { length: Math.ceil(filterPlayers().length / cardsPerPage) },
-          (_, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.pageButton,
-                currentPage === index + 1 && styles.activePageButton,
-              ]}
-              onPress={() => handlePageChange(index + 1)}
-            >
-              <Text style={styles.pageButtonText}>{index + 1}</Text>
-            </TouchableOpacity>
-          )
-        )}
+        <TouchableOpacity
+          style={styles.pageButton}
+          onPress={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <Ionicons name="ios-arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+
+        {visiblePages.map((page) => (
+          <TouchableOpacity
+            key={page}
+            style={[
+              styles.pageButton,
+              currentPage === page && styles.activePageButton,
+            ]}
+            onPress={() => handlePageChange(page)}
+          >
+            <Text style={styles.pageButtonText}>{page}</Text>
+          </TouchableOpacity>
+        ))}
+
+        <TouchableOpacity
+          style={styles.pageButton}
+          onPress={() => handlePageChange(currentPage + 1)}
+          disabled={
+            currentPage === Math.ceil(filterPlayers().length / cardsPerPage)
+          }
+        >
+          <Ionicons name="ios-arrow-forward" size={24} color="black" />
+        </TouchableOpacity>
       </View>
     </View>
   );

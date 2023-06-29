@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import DetailPlayerComponent from "../components/DetailPlayerComponent";
+import { RootStackParamList } from "../types"; // Assurez-vous d'importer correctement le type RootStackParamList
 
 interface PlayerDetail {
   id: string;
   name: string;
-  stats: any; // Replace "any" with the appropriate data structure for player statistics
+  stats: any; // Remplacez "any" par la structure de données appropriée pour les statistiques du joueur
 }
 
 interface PlayerDetailScreenProps {

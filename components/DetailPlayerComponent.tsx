@@ -17,6 +17,9 @@ const DetailPlayerComponent: React.FC<DetailPlayerComponentProps> = ({
   return (
     <View>
       <Text>{player.name}</Text>
+      <Text>{player.stats}</Text>
+      <Text>Stats: {JSON.stringify(player.stats)}</Text>
+
       {/* Affichez les autres détails du joueur ici */}
     </View>
   );
