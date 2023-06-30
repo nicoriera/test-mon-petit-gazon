@@ -9,9 +9,9 @@ const DetailPlayerComponent: React.FC<DetailPlayerComponentProps> = ({
   // Utilisez la propriété 'player' pour afficher les détails du joueur
   return (
     <View>
-      <Text>{player.name}</Text>
-      <Text>{player.stats}</Text>
-      <Text>Stats: {JSON.stringify(player.stats)}</Text>
+      <Text>Prénom : Miha</Text>
+      <Text>Nom : Blazic</Text>
+      <Text>Position: Défenseur - D</Text>
 
       {/* Affichez les autres détails du joueur ici */}
     </View>
