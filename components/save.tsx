@@ -3,21 +3,31 @@ import { View, TextInput, StyleSheet } from "react-native";
 
 type PlayerFilterProps = {
   searchName: string;
+  searchPosition: string;
   onNameChange: (name: string) => void;
+  onPositionChange: (position: string) => void;
 };
 
 const PlayerFilter: React.FC<PlayerFilterProps> = ({
   searchName,
-
+  searchPosition,
   onNameChange,
+  onPositionChange,
 }) => {
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Rechercher par nom ou par position"
+        placeholder="Rechercher par nom"
         value={searchName}
         onChangeText={onNameChange}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Rechercher par position"
+        value={searchPosition}
+        onChangeText={onPositionChange}
       />
     </View>
   );

@@ -69,31 +69,19 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
   };
 
   const filterPlayers = () => {
-    let filteredPlayers = players;
+    return players.filter((player) => {
+      const firstName = player.firstName ? player.firstName.toLowerCase() : "";
+      const lastName = player.lastName ? player.lastName.toLowerCase() : "";
+      const position = getPlayerPosition(player.ultraPosition)
+        .toLowerCase()
+        .includes(searchName.toLowerCase());
 
-    if (searchName.trim() !== "") {
-      filteredPlayers = filteredPlayers.filter((player) => {
-        const firstName = player.firstName
-          ? player.firstName.toLowerCase()
-          : "";
-        const lastName = player.lastName ? player.lastName.toLowerCase() : "";
-
-        return (
-          firstName.includes(searchName.toLowerCase()) ||
-          lastName.includes(searchName.toLowerCase())
-        );
-      });
-    }
-
-    if (searchPosition.trim() !== "") {
-      filteredPlayers = filteredPlayers.filter((player) =>
-        getPlayerPosition(player.ultraPosition)
-          .toLowerCase()
-          .includes(searchPosition.toLowerCase())
+      return (
+        firstName.includes(searchName.toLowerCase()) ||
+        lastName.includes(searchName.toLowerCase()) ||
+        position
       );
-    }
-
-    return filteredPlayers;
+    });
   };
 
   const renderPlayerCard = ({ item }: { item: Player }) => (
@@ -120,12 +108,7 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
           style={styles.imageLogo}
         />
       </View>
-      <PlayerFilter
-        searchName={searchName}
-        searchPosition={searchPosition}
-        onNameChange={setSearchName}
-        onPositionChange={setSearchPosition}
-      />
+      <PlayerFilter searchName={searchName} onNameChange={setSearchName} />
 
       <FlatList data={filterPlayers()} renderItem={renderPlayerCard} />
     </View>
