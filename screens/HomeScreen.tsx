@@ -91,17 +91,17 @@ const Card = () => {
   const getPlayerPosition = (ultraPosition: number) => {
     switch (ultraPosition) {
       case 10:
-        return "Gardien";
+        return "Gardien - G";
       case 20:
-        return "Défenseur";
+        return "Défenseur - D";
       case 21:
-        return "Latéral";
+        return "Latéral - L";
       case 30:
-        return "Milieu défensif";
+        return "Milieu défensif - MD";
       case 31:
-        return "Milieu offensif";
+        return "Milieu offensif - MO";
       case 40:
-        return "Attaquant";
+        return "Attaquant - A";
       default:
         return "";
     }
@@ -119,11 +119,6 @@ const Card = () => {
           </Text>
 
           <Text>Quotation: {player.quotation}</Text>
-          {/* <Text>
-          Club:{" "}
-          {String(clubs.find((club) => club.id === player.clubId)?.name) ||
-            "Nom du club non trouvé"}
-        </Text> */}
         </View>
       </TouchableOpacity>
     </View>
