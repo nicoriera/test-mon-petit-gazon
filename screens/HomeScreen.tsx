@@ -117,8 +117,6 @@ const Card = () => {
           <Text>
             Position: {String(getPlayerPosition(player.ultraPosition))}
           </Text>
-
-          <Text>Quotation: {player.quotation}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -127,9 +125,19 @@ const Card = () => {
   return (
     <View style={styles.container}>
       <View style={styles.containerInput}>
-        <TextInput style={styles.input} placeholder="Rechercher par nom" />
+        <TextInput
+          style={styles.input}
+          placeholder="Rechercher par nom"
+          value={searchName}
+          onChangeText={(text) => setSearchName(text)}
+        />
 
-        <TextInput style={styles.input} placeholder="Rechercher par position" />
+        <TextInput
+          style={styles.input}
+          placeholder="Rechercher par position"
+          value={searchPosition}
+          onChangeText={(text) => setSearchPosition(text)}
+        />
       </View>
 
       <FlatList
