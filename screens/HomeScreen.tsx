@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-} from "react-native";
+import { View, Image, FlatList, ActivityIndicator } from "react-native";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 
 import { Club } from "../types";
@@ -27,6 +21,8 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [searchName, setSearchName] = useState("");
   const [searchPosition, setSearchPosition] = useState("");
+
+  const [loading, setLoading] = useState(true); // Mettre le loader par défaut à true au démarrage
 
   const navigation = useNavigation();
 
@@ -65,6 +61,10 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
       }
     } catch (error) {
       console.error("Failed to fetch players:", error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000); // Mettre le loader à false une fois les joueurs récupérés
     }
   };
 
@@ -104,8 +104,22 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
     />
   );
 
+  if (loading) {
+    // Afficher le loader tant que les joueurs sont en train d'être chargés
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#45C945" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
+      <View style={styles.logo}>
+        <Image
+          source={require("../assets/logoMpg-GHHGJFQB.png")}
+          style={styles.imageLogo}
+        />
+      </View>
       <PlayerFilter
         searchName={searchName}
         searchPosition={searchPosition}
@@ -151,5 +165,21 @@ const styles = {
   cardContainer: {},
   scroll: {
     width: "100%",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logo: {
+    width: 80,
+    height: 100,
+    alignSelf: "center",
+  },
+  imageLogo: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    backgroundColor: "#fff",
   },
 };
