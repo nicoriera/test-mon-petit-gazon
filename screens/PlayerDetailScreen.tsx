@@ -21,7 +21,7 @@ const PlayerDetailScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.containerTitle}>
-        <Text style={styles.title}>Player Detail</Text>
+        <Text style={styles.title}>Détails du joueur</Text>
         <Text>Hola Test</Text>
       </View>
     </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 import { Club } from "../types";
 import { Player } from "../types";
@@ -64,21 +64,19 @@ const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
   };
 
   return (
-    <TouchableOpacity>
-      <View style={styles.card}>
-        <Text>
-          {player.firstName} {player.lastName}
-        </Text>
-        <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
+    <View style={styles.card}>
+      <Text>
+        {player.firstName} {player.lastName}
+      </Text>
+      <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
 
-        <Text>Quotation: {player.quotation}</Text>
-        {/* <Text>
+      <Text>Quotation: {player.quotation}</Text>
+      {/* <Text>
           Club:{" "}
           {String(clubs.find((club) => club.id === player.clubId)?.name) ||
             "Nom du club non trouvé"}
         </Text> */}
-      </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
