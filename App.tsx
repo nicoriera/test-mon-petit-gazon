@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Platform, View, Text } from "react-native";
+import { StyleSheet, Platform, View, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "react-native";
@@ -21,6 +21,7 @@ const App: React.FC = () => {
           justifyContent: "center",
         }}
       />
+
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
