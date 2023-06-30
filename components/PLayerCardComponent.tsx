@@ -1,93 +1,38 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Player, Club } from "../types";
+import { getPlayerPosition } from "../utils";
 
-import { Club } from "../types";
-import { Player } from "../types";
-import { PlayerCardProps } from "../types";
+type PlayerCardProps = {
+  player: Player;
+  clubs: Club[];
+  onPress: () => void;
+};
 
-const PlayerCardComponent: React.FC<PlayerCardProps> = ({ player }) => {
-  const [clubs, setClubs] = useState<Club[]>([]);
-  const [players, setPlayers] = useState<Player[]>([]);
-
-  useEffect(() => {
-    fetchClubs();
-    fetchPlayers();
-  }, []);
-
-  const fetchClubs = async () => {
-    try {
-      const response = await fetch(
-        "https://api.mpg.football/api/data/championship-clubs"
-      );
-      const data = await response.json();
-
-      setClubs(data);
-    } catch (error) {
-      console.error("Failed to fetch clubs:", error);
-    }
-  };
-
-  const fetchPlayers = async () => {
-    try {
-      const response = await fetch(
-        "https://api.mpg.football/api/data/championship-players-pool/1"
-      );
-      const data = await response.json();
-
-      if (Array.isArray(data.poolPlayers)) {
-        setPlayers(data.poolPlayers);
-      } else {
-        console.error("Invalid players data:", data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch players:", error);
-    }
-  };
-
-  const getPlayerPosition = (ultraPosition: number) => {
-    switch (ultraPosition) {
-      case 10:
-        return "Gardien";
-      case 20:
-        return "Défenseur";
-      case 21:
-        return "Latéral";
-      case 30:
-        return "Milieu défensif";
-      case 31:
-        return "Milieu offensif";
-      case 40:
-        return "Attaquant";
-      default:
-        return "";
-    }
-  };
+const PlayerCard: React.FC<PlayerCardProps> = ({ player, clubs, onPress }) => {
+  const club: Club | undefined = clubs.find((c) => c.id === player.clubId);
 
   return (
-    <View style={styles.card}>
-      <Text>
-        {player.firstName} {player.lastName}
-      </Text>
-      <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
-
-      <Text>Quotation: {player.quotation}</Text>
-      {/* <Text>
-          Club:{" "}
-          {String(clubs.find((club) => club.id === player.clubId)?.name) ||
-            "Nom du club non trouvé"}
-        </Text> */}
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.card}>
+        <Text>
+          {player.firstName} {player.lastName}
+        </Text>
+        <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
+        {club && <Text>Club: {club.name["fr-FR"]}</Text>}
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#85f790",
-    borderRadius: 10,
-    padding: 10,
-    margin: 10,
-    minWidth: 20,
+    backgroundColor: "#71D671",
+    boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+    padding: 20,
+    borderRadius: 5,
+    marginVertical: 5,
   },
 });
 
-export default PlayerCardComponent;
+export default PlayerCard;

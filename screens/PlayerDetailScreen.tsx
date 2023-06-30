@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, RouteProp } from "@react-navigation/native";
 import DetailPlayerComponent from "../components/DetailPlayerComponent";
 
-import { PlayerDetail } from "../types";
-import { PlayerDetailScreenProps } from "../types";
+import { PlayerDetail, PlayerDetailScreenProps } from "../types";
 
 //////////////////////////////////////////////////////
 
@@ -25,8 +24,10 @@ const PlayerDetailScreen = ({ route }: PlayerDetailScreenProps) => {
 
   useEffect(() => {
     const playerId = route.params?.playerId;
-    fetchPlayerDetail(playerId);
-  }, []);
+    if (playerId) {
+      fetchPlayerDetail(playerId);
+    }
+  }, [route.params]);
 
   const fetchPlayerDetail = async (playerId: string) => {
     try {
@@ -39,6 +40,7 @@ const PlayerDetailScreen = ({ route }: PlayerDetailScreenProps) => {
       console.log("Player detail:", data);
 
       setSelectedPlayer(data);
+
       setLoading(false); // Set loading to false after receiving the data
     } catch (error) {
       console.error("Failed to fetch player detail:", error);

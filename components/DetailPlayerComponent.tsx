@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import { DetailPlayerComponentProps } from "../types";
+import { DetailPlayerComponentProps, PlayerDetail } from "../types";
+
+import { getPlayerPosition } from "../utils";
 
 const DetailPlayerComponent: React.FC<DetailPlayerComponentProps> = ({
   player,
@@ -9,10 +11,9 @@ const DetailPlayerComponent: React.FC<DetailPlayerComponentProps> = ({
   // Utilisez la propriété 'player' pour afficher les détails du joueur
   return (
     <View>
-      <Text>Prénom : Miha</Text>
-      <Text>Nom : Blazic</Text>
-      <Text>Position: Défenseur - D</Text>
-
+      <Text>Prénom : {player.firstName}</Text>
+      <Text>Nom : {player.lastName}</Text>
+      <Text>Position: {String(getPlayerPosition(player.ultraPosition))}</Text>
       {/* Affichez les autres détails du joueur ici */}
     </View>
   );
