@@ -1,3 +1,5 @@
+import { RouteProp } from "@react-navigation/native";
+
 export type RootStackParamList = {
   Home: undefined;
   PlayerDetail: { playerId: string };
@@ -42,15 +44,28 @@ export type Player = {
 
 export type PlayerDetail = {
   id: string;
-  name: string;
-  stats: any; // Replace "any" with the appropriate data structure for player statistics
+  firstName: string;
+  lastName: string;
+  position: number;
+  ultraPosition: number;
+  quotation: number;
+  clubId: string;
+  stats: {
+    averageRating: number;
+    totalGoals: number;
+    totalMatches: number;
+    totalStartedMatches: number;
+    totalPlayedMatches: number;
+  };
+  pictureUrl: string;
 };
+
 export type DetailPlayerComponentProps = {
   player: PlayerDetail;
 };
 
 export type PlayerDetailScreenProps = {
-  route: any; // Remplacez "any" par le type approprié pour le paramètre de navigation
+  route: RouteProp<RootStackParamList, "PlayerDetail">;
 };
 
 export type PlayerCardProps = {

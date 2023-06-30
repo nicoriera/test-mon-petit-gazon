@@ -6,15 +6,23 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, RouteProp } from "@react-navigation/native";
 
 import { Club } from "../types";
 import { Player } from "../types";
-import { PlayerCardProps } from "../types";
+import { RootStackParamList } from "../types";
+
+import { getPlayerPosition } from "../utils";
+
+import PlayerCard from "../components/PlayerCardComponent";
+import PlayerFilter from "../components/PlayerFilterComponent";
 
 //////////////////////////////////////////
+type PlayerDetailScreenProps = {
+  route: RouteProp<RootStackParamList, "PlayerDetail">;
+};
 
-const Card = () => {
+const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [searchName, setSearchName] = useState("");
@@ -22,8 +30,8 @@ const Card = () => {
 
   const navigation = useNavigation();
 
-  const handleCardPress = () => {
-    navigation.navigate("PlayerDetail" as never);
+  const handleCardPress = (playerId: string) => {
+    navigation.navigate("PlayerDetail", { playerId });
   };
 
   useEffect(() => {
@@ -88,62 +96,24 @@ const Card = () => {
     return filteredPlayers;
   };
 
-  const getPlayerPosition = (ultraPosition: number) => {
-    switch (ultraPosition) {
-      case 10:
-        return "Gardien - G";
-      case 20:
-        return "Défenseur - D";
-      case 21:
-        return "Latéral - L";
-      case 30:
-        return "Milieu défensif - MD";
-      case 31:
-        return "Milieu offensif - MO";
-      case 40:
-        return "Attaquant - A";
-      default:
-        return "";
-    }
-  };
-
-  const renderPlayerCard = (player: Player) => (
-    <View>
-      <TouchableOpacity onPress={handleCardPress}>
-        <View style={styles.card}>
-          <Text>
-            {player.firstName} {player.lastName}
-          </Text>
-          <Text>
-            Position: {String(getPlayerPosition(player.ultraPosition))}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+  const renderPlayerCard = ({ item }: { item: Player }) => (
+    <PlayerCard
+      player={item}
+      onPress={() => handleCardPress(item.id)}
+      clubs={[]}
+    />
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerInput}>
-        <TextInput
-          style={styles.input}
-          placeholder="Rechercher par nom"
-          value={searchName}
-          onChangeText={(text) => setSearchName(text)}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Rechercher par position"
-          value={searchPosition}
-          onChangeText={(text) => setSearchPosition(text)}
-        />
-      </View>
-
-      <FlatList
-        data={filterPlayers()}
-        renderItem={({ item }) => renderPlayerCard(item)}
+      <PlayerFilter
+        searchName={searchName}
+        searchPosition={searchPosition}
+        onNameChange={setSearchName}
+        onPositionChange={setSearchPosition}
       />
+
+      <FlatList data={filterPlayers()} renderItem={renderPlayerCard} />
     </View>
   );
 };
@@ -157,8 +127,6 @@ const styles = {
     paddingHorizontal: 10,
   },
   containerInput: {
-    justifyContent: "center",
-    alignItems: "center",
     marginTop: 10,
     marginBottom: 10,
   },
