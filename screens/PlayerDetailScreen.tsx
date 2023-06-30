@@ -14,37 +14,43 @@ const PlayerDetailScreen = () => {
   };
 
   return (
-    <>
-      <View>
+    <View style={styles.container}>
+      <View style={styles.containerGoBack}>
         <TouchableOpacity onPress={handleGoBack}>
           <Text style={styles.goback}>Retour</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
+      <View style={styles.containerTitle}>
         <Text style={styles.title}>Player Detail</Text>
-
         <Text>Hola Test</Text>
       </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  containerTitle: {
+    flex: 1,
+    padding: 10,
   },
   title: {
+    textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
   },
+  containerGoBack: {
+    backgroundColor: "lightgray",
+    padding: 10,
+  },
   goback: {
     fontSize: 12,
-    color: "#7F7F7F",
+    color: "#3B3B3B",
     fontWeight: "bold",
-    margin: 10,
   },
 });
 
