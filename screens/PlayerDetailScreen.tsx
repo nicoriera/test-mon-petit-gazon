@@ -37,7 +37,6 @@ const PlayerDetailScreen = ({ route }: PlayerDetailScreenProps) => {
         `https://api.mpg.football/api/data/championship-player-stats/${playerId}/2022`
       );
       const data = await response.json();
-      console.log("Player detail:", data);
 
       setSelectedPlayer(data);
 
