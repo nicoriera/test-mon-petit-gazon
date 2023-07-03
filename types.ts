@@ -24,13 +24,14 @@ export type Club = {
   defaultJerseyUrl: string;
   defaultAssets: null;
 };
+export type UltraPosition = number | "G" | "D" | "M" | "A";
 
 export type Player = {
   id: string;
   firstName: string;
   lastName: string;
   position: number;
-  ultraPosition: number;
+  ultraPosition: UltraPosition;
   quotation: number;
   clubId: string;
   stats: {
@@ -47,7 +48,7 @@ export type PlayerDetail = {
   firstName: string;
   lastName: string;
   position: number;
-  ultraPosition: number;
+  ultraPosition: UltraPosition;
   quotation: number;
   clubId: string;
   stats: {

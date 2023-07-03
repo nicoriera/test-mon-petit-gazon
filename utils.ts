@@ -1,4 +1,6 @@
-export const getPlayerPosition = (ultraPosition: number) => {
+import { UltraPosition } from "./types";
+
+export const getPlayerPosition = (ultraPosition: UltraPosition) => {
   switch (ultraPosition) {
     case 10:
       return "Gardien - G";

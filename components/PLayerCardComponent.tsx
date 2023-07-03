@@ -14,6 +14,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, clubs, onPress }) => {
     (club) => club.id === player.clubId
   );
 
+  const guardianPosition = player.ultraPosition !== 10;
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
@@ -24,7 +25,9 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, clubs, onPress }) => {
           <Text>{String(getPlayerPosition(player.ultraPosition))}</Text>
           <View style={styles.cardMoreInfo}>
             <Text style={styles.text}>Note: {player.quotation}</Text>
-            <Text style={styles.text}>But(s): {player.stats.totalGoals}</Text>
+            {guardianPosition ? (
+              <Text style={styles.text}>But(s): {player.stats.totalGoals}</Text>
+            ) : null}
             <Text style={styles.text}>
               Match joué(s): {player.stats.totalPlayedMatches}
             </Text>
@@ -52,12 +55,18 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     justifyContent: "space-between",
-
     backgroundColor: "#F3CA40",
-    boxShadow: "0 0 5px rgba(0,0,0,0.5)",
     padding: 20,
     borderRadius: 5,
     marginVertical: 5,
+    shadowColor: "#393D3F",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.84,
+    elevation: 10,
   },
   jerseyImage: {
     width: 100,

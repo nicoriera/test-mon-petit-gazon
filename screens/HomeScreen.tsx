@@ -130,13 +130,6 @@ const styles = {
     backgroundColor: "#fff",
     paddingHorizontal: 10,
   } as ViewStyle,
-  card: {
-    backgroundColor: "#71D671",
-    elevation: 10,
-    padding: 20,
-    borderRadius: 5,
-    marginVertical: 5,
-  } as ViewStyle,
   loaderContainer: {
     flex: 1,
     justifyContent: "center",
