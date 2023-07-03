@@ -8,7 +8,7 @@ import { RootStackParamList } from "../types";
 
 import { getPlayerPosition } from "../utils";
 
-import PlayerCard from "../components/PlayerCardComponent";
+import PlayerCard from "../components/PLayerCardComponent";
 import PlayerFilter from "../components/PlayerFilterComponent";
 
 //////////////////////////////////////////
@@ -20,7 +20,6 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [searchName, setSearchName] = useState("");
-  const [searchPosition, setSearchPosition] = useState("");
 
   const [loading, setLoading] = useState(true); // Mettre le loader par défaut à true au démarrage
 
@@ -41,7 +40,7 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
         "https://api.mpg.football/api/data/championship-clubs"
       );
       const data = await response.json();
-      setClubs(data);
+      setClubs(Object.values(data.championshipClubs));
     } catch (error) {
       console.error("Failed to fetch clubs:", error);
     }
@@ -88,7 +87,8 @@ const Card: React.FC<PlayerDetailScreenProps> = ({ route }) => {
     <PlayerCard
       player={item}
       onPress={() => handleCardPress(item.id)}
-      clubs={[]}
+      clubs={clubs}
+      players={players}
     />
   );
 
@@ -123,10 +123,7 @@ const styles = {
     backgroundColor: "#fff",
     paddingHorizontal: 10,
   },
-  containerInput: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
+
   card: {
     backgroundColor: "#71D671",
     boxShadow: "0 0 5px rgba(0,0,0,0.2)",
@@ -137,14 +134,7 @@ const styles = {
   cardText: {
     fontSize: 18,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 5,
-    width: "50%",
-    borderRadius: 10,
-  },
+
   cardContainer: {},
   scroll: {
     width: "100%",

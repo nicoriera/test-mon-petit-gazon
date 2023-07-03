@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 10,
     marginVertical: 5,
-    width: "50%",
+    width: "100%",
     borderRadius: 10,
   },
 });
