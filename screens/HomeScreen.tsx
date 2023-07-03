@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  ViewStyle,
+  ImageStyle,
+} from "react-native";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 
 import { Club } from "../types";
@@ -122,37 +129,28 @@ const styles = {
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: 10,
-  },
-
+  } as ViewStyle,
   card: {
     backgroundColor: "#71D671",
-    boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+    elevation: 10,
     padding: 20,
     borderRadius: 5,
     marginVertical: 5,
-  },
-  cardText: {
-    fontSize: 18,
-  },
-
-  cardContainer: {},
-  scroll: {
-    width: "100%",
-  },
+  } as ViewStyle,
   loaderContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
+  } as ViewStyle,
   logo: {
     width: 80,
     height: 100,
     alignSelf: "center",
-  },
+  } as ViewStyle,
   imageLogo: {
     width: "100%",
     height: "100%",
     resizeMode: "contain",
     backgroundColor: "#fff",
-  },
+  } as ImageStyle,
 };

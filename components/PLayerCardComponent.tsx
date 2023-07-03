@@ -18,17 +18,22 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, clubs, onPress }) => {
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
         <View style={styles.cardPlayerInfo}>
-          <Text>
+          <Text style={styles.cardNameInfo}>
             {player.firstName} {player.lastName}
           </Text>
-          <Text>
-            Position: {String(getPlayerPosition(player.ultraPosition))}
-          </Text>
+          <Text>{String(getPlayerPosition(player.ultraPosition))}</Text>
+          <View style={styles.cardMoreInfo}>
+            <Text style={styles.text}>Note: {player.quotation}</Text>
+            <Text style={styles.text}>But(s): {player.stats.totalGoals}</Text>
+            <Text style={styles.text}>
+              Match joué(s): {player.stats.totalPlayedMatches}
+            </Text>
+          </View>
         </View>
         <View style={styles.cardClubInfo}>
           {club ? (
             <>
-              <Text>Club: {club.name["fr-FR"]}</Text>
+              <Text style={styles.cardNameClubInfo}>{club.name["fr-FR"]}</Text>
               <Image
                 source={{ uri: club.defaultJerseyUrl }}
                 style={styles.jerseyImage}
@@ -46,11 +51,10 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, clubs, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    borderColor: "#45C945",
-    borderWidth: 1,
-    boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+
+    backgroundColor: "#F3CA40",
+    boxShadow: "0 0 5px rgba(0,0,0,0.5)",
     padding: 20,
     borderRadius: 5,
     marginVertical: 5,
@@ -62,8 +66,6 @@ const styles = StyleSheet.create({
   },
   cardPlayerInfo: {
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
     padding: 10,
   },
   cardClubInfo: {
@@ -71,6 +73,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
+  },
+  cardNameInfo: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  cardNameClubInfo: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  cardMoreInfo: {
+    marginTop: 10,
+  },
+  text: {
+    fontSize: 13,
+    color: "#393D3F",
   },
 });
 

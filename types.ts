@@ -72,4 +72,5 @@ export type PlayerCardProps = {
   player: Player;
   clubs: Club[];
   players: Player[];
+  onPress: () => void;
 };
